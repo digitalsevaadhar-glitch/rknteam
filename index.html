@@ -119,4 +119,99 @@ footer{text-align:center;background:#081b34;color:white;padding:20px}
 </footer>
 
 </body>
+<section id="supervisor-registration" style="padding:40px 7%;background:#f2f6fb;">
+  <h2 style="text-align:center;color:#123d70;">Supervisor Registration</h2>
+  <p style="text-align:center;">Join RKN TEAM – Register Here</p>
+
+  <form id="supervisorForm" style="max-width:600px;margin:25px auto;background:white;padding:25px;border-radius:12px;box-shadow:0 2px 12px #ddd;">
+
+    <label>Full Name *</label>
+    <input name="name" required placeholder="Supervisor Name">
+
+    <label>Mobile Number *</label>
+    <input name="mobile" required type="tel" pattern="[0-9]{10}" maxlength="10" placeholder="10 digit mobile number">
+
+    <label>Email</label>
+    <input name="email" type="email" placeholder="Email Address">
+
+    <label>Full Address *</label>
+    <textarea name="address" required placeholder="Your Address"></textarea>
+
+    <label>Qualification</label>
+    <input name="qualification" placeholder="Your Qualification">
+
+    <label>Work Experience</label>
+    <input name="experience" placeholder="Example: 3 Years">
+
+    <label>Work Category *</label>
+    <select name="category" required>
+      <option value="">Select Work</option>
+      <option>Civil</option>
+      <option>Scaffolding</option>
+      <option>Electrical</option>
+      <option>Fire Protection</option>
+      <option>Painting</option>
+      <option>Manpower</option>
+    </select>
+
+    <label>Joining Date</label>
+    <input name="joiningDate" type="date">
+
+    <button type="submit" id="registerBtn" style="width:100%;padding:14px;background:#123d70;color:white;border:0;border-radius:7px;margin-top:20px;font-size:17px;">
+      Submit Registration
+    </button>
+    <p id="formMessage" style="margin-top:15px;text-align:center;"></p>
+  </form>
+</section>
+
+<style>
+#supervisorForm input,
+#supervisorForm textarea,
+#supervisorForm select {
+  display:block;width:100%;padding:12px;margin:7px 0 17px;
+  border:1px solid #ccc;border-radius:6px;font-size:15px;
+}
+#supervisorForm label {font-weight:bold;color:#243047;}
+</style>
+
+<script>
+const scriptURL = "https://script.google.com/macros/s/AKfycbzZmishKOnhCjHk8hh54PxvhWnMryY0Yj2xh0_GuUOj43XFWcHz7WURWuIq-5bcNac9gg/exec";
+
+document.getElementById("supervisorForm").addEventListener("submit", async function(e) {
+  e.preventDefault();
+
+  const form = this;
+  const btn = document.getElementById("registerBtn");
+  const msg = document.getElementById("formMessage");
+
+  btn.disabled = true;
+  btn.textContent = "Submitting...";
+  msg.textContent = "";
+
+  const data = Object.fromEntries(new FormData(form).entries());
+
+  try {
+    await fetch(scriptURL, {
+      method: "POST",
+      mode: "no-cors",
+      headers: {
+        "Content-Type": "text/plain;charset=utf-8"
+      },
+      body: JSON.stringify(data)
+    });
+
+    msg.textContent = "Registration submitted. Please verify the entry in the Google Sheet.";
+    msg.style.color = "green";
+    form.reset();
+
+  } catch (error) {
+    msg.textContent = "Submission failed. Please try again.";
+    msg.style.color = "red";
+  }
+
+  btn.disabled = false;
+  btn.textContent = "Submit Registration";
+});
+</script>
+
 </html>
